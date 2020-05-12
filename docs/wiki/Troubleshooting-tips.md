@@ -35,14 +35,14 @@ For environments where you cannot use the command-line, you can include `#error 
 
 Those are scenarios where you need to compile the same code with different versions of the compiler.
 
-The latest native compiler (pre-Roslyn) is part of the .NET Framework, so you can run it from `c:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe`.
+The latest native compiler (pre-Roslyn) is part of the .NET Framework, so you can run it from `C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe`.
 
-For trying various Roslyn versions, you can create a new project with your code, and add a reference to [`Microsoft.Net.Compilers.Toolset`](../compilers/Compiler%20Toolset%20NuPkgs.md). By choosing the source (nuget.org or Azure DevOps) and the package version (see [versioning help](https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md#versioning)), you will be able to control what version of the compiler is used. Note that you need to _Build_ your project to compile the code with the desired compiler version (the IDE may show squiggles and use a different version).
+For trying various Roslyn versions, you can create a new project with your code, and add a reference to [`Microsoft.NETFramework.Compilers`](../compilers/Compiler%20Toolset%20NuPkgs.md). By choosing the source (nuget.org or Azure DevOps) and the package version (see [versioning help](https://github.com/dotnet/roslyn/blob/main/docs/wiki/NuGet-packages.md#versioning)), you will be able to control what version of the compiler is used. Note that you need to _Build_ your project to compile the code with the desired compiler version (the IDE may show squiggles and use a different version).
 
 # Running and debugging a test on Core on Windows
 To run all Core tests on Windows, you can use `Build.cmd -testCoreClr`.
 
-To run a specific test, here's an example of command that can be used and adjusted: 
+To run a specific test, here's an example of command that can be used and adjusted:
 `"C:\Program Files\dotnet\dotnet.exe" exec --depsfile D:\repos\roslyn\artifacts\bin\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests\Debug\netcoreapp3.0\\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests.deps.json --runtimeconfig D:\repos\roslyn\artifacts\bin\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests\Debug\netcoreapp3.0\\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests.runtimeconfig.json C:\Users\jcouv\.nuget\packages\dotnet-xunit\2.3.0-beta4-build3742\tools\netcoreapp2.0\xunit.console.dll D:\repos\roslyn\artifacts\bin\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests\Debug\netcoreapp3.0\\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests.dll -xml D:\repos\roslyn\artifacts\TestResults\Microsoft.CodeAnalysis.CSharp.Symbol.UnitTests.xml -method "*.MyTestMethod"`.
 
 Such test can be debugged by opening `C:\Program Files\dotnet\dotnet.exe` as a project in Visual Studio, then configuring the debug arguments and engine (pick CoreCLR).
@@ -55,9 +55,9 @@ All the compiler diagnostics that appear as IDE squiggles are channeled through 
 I recently had to test a [Roslyn change](https://github.com/dotnet/roslyn/pull/27349) in integration into the CLI. Here are the steps:
 
 1. In roslyn enlistment ran: `powershell -noprofile -executionPolicy RemoteSigned -file eng\build.ps1 -bootstrap -buildcoreclr`. That puts a valid MSBuild layout into "E:\code\roslyn\Binaries\Bootstrap\Microsoft.NETCore.Compilers\42.42.42.42\tools"
-1. Created a Net Core app project that had the stack overflow case. 
-1. In the sample code directory 
-    1. Ran `dotnet build` and verified no stack printed 
+1. Created a Net Core app project that had the stack overflow case.
+1. In the sample code directory
+    1. Ran `dotnet build` and verified no stack printed
     1. Ran ` dotnet build /p:RoslynTargetsPath=E:\code\roslyn\Binaries\Bootstrap\Microsoft.NETCore.Compilers\42.42.42.42\tools` and verified the stack trace was printed
 
 # Creating a dump file for a hung process
